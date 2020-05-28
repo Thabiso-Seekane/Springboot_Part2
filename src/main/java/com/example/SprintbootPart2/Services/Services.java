@@ -4,6 +4,7 @@ import com.example.SprintbootPart2.dao.FakeDao;
 import com.example.SprintbootPart2.entities.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -25,8 +26,17 @@ public abstract class Services implements ServicesInterface {
     }
 
     @Override
+    @Cacheable("User")
     public Optional<User> getUsersById(UUID id){
-        return fakeDao.selectUserById(id);
+        try {
+            System.out.println("Going to sleep for 5 Secs... to simulate backend call.");
+            Thread.sleep(1000*5);
+        }
+        catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        fakeDao.selectUserById(id);
+        return null;
     }
 
     @Override
